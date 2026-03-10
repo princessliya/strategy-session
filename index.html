@@ -1,0 +1,1420 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Strategy Session — Lea Frances Yu | 7 Figure MSP</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+/* ============================================
+   RESET & BASE
+   ============================================ */
+*, *::before, *::after {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+:root {
+  --bg: #0D0D0F;
+  --surface: #18181B;
+  --surface-hover: #27272A;
+  --border: #2E2E33;
+  --text-primary: #F4F4F5;
+  --text-secondary: #A1A1AA;
+  --accent: #818CF8;
+  --accent-glow: rgba(129, 140, 248, 0.15);
+  --accent-dim: rgba(129, 140, 248, 0.3);
+  --warm: #FBBF24;
+  --green: #34D399;
+  --font-main: 'Inter', system-ui, -apple-system, sans-serif;
+  --font-mono: 'JetBrains Mono', monospace;
+}
+
+html { scroll-behavior: smooth; }
+
+body {
+  background: var(--bg);
+  color: var(--text-primary);
+  font-family: var(--font-main);
+  line-height: 1.6;
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+}
+
+body::before {
+  content: '';
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.03'/%3E%3C/svg%3E");
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* ============================================
+   LAYOUT
+   ============================================ */
+.page-wrapper { position: relative; z-index: 1; }
+
+.section {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 80px 24px;
+}
+
+@media (min-width: 768px) {
+  .section { padding: 100px 64px; }
+}
+
+.section-divider {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 24px;
+}
+@media (min-width: 768px) {
+  .section-divider { padding: 0 64px; }
+}
+
+.section-divider::after {
+  content: '';
+  display: block;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--border), transparent);
+}
+
+/* ============================================
+   TYPOGRAPHY
+   ============================================ */
+.eyebrow {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--accent);
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  margin-bottom: 16px;
+}
+
+.headline-xl {
+  font-size: clamp(32px, 5vw, 52px);
+  font-weight: 600;
+  line-height: 1.12;
+  letter-spacing: -0.02em;
+  color: var(--text-primary);
+  margin-bottom: 20px;
+}
+
+.headline-lg {
+  font-size: clamp(26px, 3.5vw, 36px);
+  font-weight: 600;
+  line-height: 1.2;
+  letter-spacing: -0.01em;
+  color: var(--text-primary);
+  margin-bottom: 16px;
+}
+
+.headline-md {
+  font-size: clamp(24px, 3vw, 32px);
+  font-weight: 600;
+  line-height: 1.25;
+  color: var(--text-primary);
+  margin-bottom: 16px;
+}
+
+.body-text {
+  font-size: 17px;
+  color: var(--text-secondary);
+  line-height: 1.7;
+  max-width: 520px;
+}
+
+/* ============================================
+   SCROLL ANIMATIONS
+   ============================================ */
+.fade-up {
+  opacity: 0;
+  transform: translateY(24px);
+  transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+}
+.fade-up.visible { opacity: 1; transform: translateY(0); }
+
+.stagger-1 { transition-delay: 0.05s; }
+.stagger-2 { transition-delay: 0.1s; }
+.stagger-3 { transition-delay: 0.15s; }
+.stagger-4 { transition-delay: 0.2s; }
+.stagger-5 { transition-delay: 0.25s; }
+.stagger-6 { transition-delay: 0.3s; }
+
+/* ============================================
+   BUTTONS
+   ============================================ */
+.btn-primary {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: var(--accent);
+  color: #fff;
+  font-family: var(--font-main);
+  font-size: 15px;
+  font-weight: 600;
+  padding: 14px 32px;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  text-decoration: none;
+  transition: all 0.25s ease;
+  box-shadow: 0 0 24px var(--accent-glow);
+}
+.btn-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 0 40px var(--accent-glow), 0 8px 24px rgba(0,0,0,0.3);
+}
+.btn-primary:disabled {
+  opacity: 0.3;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
+.btn-primary .arrow { transition: transform 0.25s ease; }
+.btn-primary:hover .arrow { transform: translateY(2px); }
+
+.btn-large {
+  font-size: 17px;
+  padding: 18px 48px;
+  border-radius: 12px;
+  box-shadow: 0 0 40px var(--accent-glow);
+}
+
+.btn-secondary {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: transparent;
+  color: var(--text-secondary);
+  font-family: var(--font-main);
+  font-size: 14px;
+  font-weight: 500;
+  padding: 10px 20px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+.btn-secondary:hover {
+  border-color: var(--accent-dim);
+  color: var(--text-primary);
+}
+
+/* ============================================
+   HERO SECTION
+   ============================================ */
+.hero {
+  min-height: 90vh;
+  display: flex;
+  align-items: center;
+  position: relative;
+}
+.hero::before {
+  content: '';
+  position: absolute;
+  top: -20%; right: -10%;
+  width: 600px; height: 600px;
+  background: radial-gradient(circle, rgba(129, 140, 248, 0.06) 0%, transparent 70%);
+  pointer-events: none;
+}
+
+.hero-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 48px;
+  align-items: center;
+  width: 100%;
+}
+@media (min-width: 900px) {
+  .hero-grid { grid-template-columns: 1fr 1fr; gap: 64px; }
+}
+
+.hero-text { display: flex; flex-direction: column; gap: 8px; }
+
+.hero-text .headline-xl span {
+  background: linear-gradient(135deg, var(--text-primary) 0%, var(--accent) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* ============================================
+   STRATEGY WORKSPACE PANEL
+   ============================================ */
+.workspace-panel {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 28px 32px;
+  font-family: var(--font-mono);
+  font-size: 13px;
+  position: relative;
+  transform: rotate(1deg);
+  box-shadow: 0 0 60px rgba(129, 140, 248, 0.06), 0 24px 48px rgba(0, 0, 0, 0.3);
+  transition: transform 0.4s ease;
+}
+.workspace-panel:hover { transform: rotate(0deg) translateY(-4px); }
+@media (max-width: 899px) { .workspace-panel { transform: rotate(0deg); } }
+
+.workspace-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid var(--border);
+}
+.workspace-title {
+  font-weight: 500; font-size: 11px;
+  letter-spacing: 2.5px; color: var(--text-secondary);
+  text-transform: uppercase;
+}
+.status-badge {
+  display: flex; align-items: center; gap: 6px;
+  font-size: 11px; color: var(--warm);
+}
+.status-dot {
+  width: 6px; height: 6px;
+  background: var(--warm); border-radius: 50%;
+  animation: pulse-dot 2s ease-in-out infinite;
+}
+@keyframes pulse-dot {
+  0%, 100% { transform: scale(1); opacity: 1; }
+  50% { transform: scale(1.5); opacity: 0.4; }
+}
+
+.workspace-items { display: flex; flex-direction: column; gap: 10px; margin-bottom: 20px; }
+.workspace-item {
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 8px 12px; border-radius: 8px; transition: background 0.2s ease;
+}
+.workspace-item:hover { background: rgba(255,255,255, 0.03); }
+.workspace-item-left {
+  display: flex; align-items: center; gap: 10px;
+  color: var(--text-primary); font-size: 13.5px;
+}
+.item-arrow { color: var(--accent); font-size: 10px; }
+.workspace-item-status { font-size: 11px; padding: 2px 10px; border-radius: 20px; }
+.status-ready { color: var(--accent); background: rgba(129, 140, 248, 0.1); }
+.status-review { color: var(--warm); background: rgba(251, 191, 36, 0.1); }
+.status-queued { color: var(--text-secondary); background: rgba(161, 161, 170, 0.1); }
+
+.workspace-footer {
+  padding-top: 16px; border-top: 1px solid var(--border);
+  display: flex; flex-direction: column; gap: 4px;
+}
+.workspace-footer-line {
+  color: var(--text-secondary); font-size: 12px;
+  display: flex; align-items: center; gap: 6px;
+}
+.workspace-footer-line .label { color: #52525B; }
+
+.cursor-blink { animation: blink 1s step-end infinite; }
+@keyframes blink { 50% { opacity: 0; } }
+
+/* ============================================
+   INTAKE FLOW - INTERACTIVE SECTION
+   ============================================ */
+.intake-section {
+  position: relative;
+}
+
+/* Progress bar */
+.intake-progress {
+  display: flex;
+  align-items: center;
+  gap: 0;
+  margin-bottom: 48px;
+  max-width: 480px;
+}
+
+.progress-step {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-family: var(--font-mono);
+  font-size: 12px;
+  color: var(--text-secondary);
+  opacity: 0.4;
+  transition: all 0.3s ease;
+  white-space: nowrap;
+}
+.progress-step.active { opacity: 1; color: var(--accent); }
+.progress-step.completed { opacity: 1; color: var(--green); }
+
+.progress-step-number {
+  width: 28px; height: 28px;
+  border-radius: 50%;
+  border: 1px solid var(--border);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 11px; font-weight: 600;
+  transition: all 0.3s ease;
+  flex-shrink: 0;
+}
+.progress-step.active .progress-step-number {
+  border-color: var(--accent);
+  background: rgba(129, 140, 248, 0.15);
+  color: var(--accent);
+}
+.progress-step.completed .progress-step-number {
+  border-color: var(--green);
+  background: rgba(52, 211, 153, 0.15);
+  color: var(--green);
+}
+
+.progress-line {
+  flex: 1;
+  height: 1px;
+  background: var(--border);
+  margin: 0 12px;
+  min-width: 24px;
+}
+
+/* Intake Step Panels */
+.intake-step {
+  display: none;
+  animation: fadeIn 0.4s ease-out;
+}
+.intake-step.active { display: block; }
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(12px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.intake-step-header {
+  margin-bottom: 32px;
+}
+.intake-step-header .headline-md { margin-bottom: 8px; }
+.intake-step-header .body-text { margin-bottom: 0; }
+
+/* Step 1: Challenge Cards */
+.challenge-cards {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 12px;
+}
+@media (min-width: 560px) {
+  .challenge-cards { grid-template-columns: 1fr 1fr; }
+}
+@media (min-width: 900px) {
+  .challenge-cards { grid-template-columns: 1fr 1fr 1fr; }
+}
+
+.challenge-card {
+  background: var(--surface);
+  border: 1.5px solid var(--border);
+  border-radius: 14px;
+  padding: 22px;
+  cursor: pointer;
+  transition: all 0.25s ease;
+  position: relative;
+  user-select: none;
+}
+.challenge-card:hover {
+  border-color: var(--accent-dim);
+  background: var(--surface-hover);
+}
+.challenge-card.selected {
+  border-color: var(--accent);
+  background: rgba(129, 140, 248, 0.08);
+  box-shadow: 0 0 20px rgba(129, 140, 248, 0.08);
+}
+
+.challenge-card-check {
+  position: absolute;
+  top: 12px; right: 12px;
+  width: 22px; height: 22px;
+  border-radius: 50%;
+  border: 1.5px solid var(--border);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 12px;
+  transition: all 0.25s ease;
+  color: transparent;
+}
+.challenge-card.selected .challenge-card-check {
+  border-color: var(--accent);
+  background: var(--accent);
+  color: #fff;
+}
+
+.challenge-card-number {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--accent);
+  opacity: 0.5;
+  margin-bottom: 12px;
+}
+.challenge-card.selected .challenge-card-number { opacity: 1; }
+
+.challenge-card-title {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin-bottom: 6px;
+  line-height: 1.35;
+}
+
+.challenge-card-desc {
+  font-size: 13px;
+  color: var(--text-secondary);
+  line-height: 1.5;
+}
+
+/* Step 2: Detail Input */
+.detail-form {
+  max-width: 640px;
+}
+
+.form-group {
+  margin-bottom: 24px;
+}
+
+.form-label {
+  display: block;
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--text-primary);
+  margin-bottom: 8px;
+}
+
+.form-sublabel {
+  font-size: 13px;
+  color: var(--text-secondary);
+  margin-bottom: 12px;
+  display: block;
+}
+
+.form-textarea {
+  width: 100%;
+  min-height: 140px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 16px 20px;
+  color: var(--text-primary);
+  font-family: var(--font-main);
+  font-size: 15px;
+  line-height: 1.6;
+  resize: vertical;
+  transition: border-color 0.2s ease;
+  outline: none;
+}
+.form-textarea:focus {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px rgba(129, 140, 248, 0.1);
+}
+.form-textarea::placeholder { color: #52525B; }
+
+.form-select {
+  width: 100%;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 14px 20px;
+  color: var(--text-primary);
+  font-family: var(--font-main);
+  font-size: 15px;
+  outline: none;
+  cursor: pointer;
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23A1A1AA' d='M6 8L1 3h10z'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 16px center;
+  transition: border-color 0.2s ease;
+}
+.form-select:focus {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px rgba(129, 140, 248, 0.1);
+}
+
+/* Step 3: Review Summary */
+.review-panel {
+  max-width: 640px;
+}
+
+.review-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 32px;
+  margin-bottom: 24px;
+}
+
+.review-card-header {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--text-secondary);
+  margin-bottom: 20px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid var(--border);
+}
+
+.review-item {
+  margin-bottom: 20px;
+}
+.review-item:last-child { margin-bottom: 0; }
+
+.review-item-label {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: #52525B;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  margin-bottom: 6px;
+}
+
+.review-item-value {
+  font-size: 15px;
+  color: var(--text-primary);
+  line-height: 1.6;
+}
+
+.review-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.review-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 14px;
+  background: rgba(129, 140, 248, 0.1);
+  border: 1px solid rgba(129, 140, 248, 0.2);
+  border-radius: 20px;
+  font-size: 13px;
+  color: var(--accent);
+}
+
+.review-note {
+  background: rgba(251, 191, 36, 0.06);
+  border: 1px solid rgba(251, 191, 36, 0.15);
+  border-radius: 12px;
+  padding: 16px 20px;
+  font-size: 13px;
+  color: var(--warm);
+  display: flex;
+  align-items: start;
+  gap: 10px;
+  margin-top: 16px;
+}
+
+/* Step navigation */
+.intake-nav {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-top: 36px;
+  padding-top: 24px;
+  border-top: 1px solid var(--border);
+}
+
+.step-counter {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  color: #52525B;
+  margin-left: auto;
+}
+
+/* ============================================
+   PROCESS SECTION
+   ============================================ */
+.process-section { text-align: center; }
+.process-header { margin-bottom: 56px; }
+.process-header .body-text { margin: 0 auto; text-align: center; }
+
+.process-steps {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 16px;
+  max-width: 960px;
+  margin: 0 auto;
+}
+@media (min-width: 768px) {
+  .process-steps {
+    grid-template-columns: 1fr auto 1fr auto 1fr;
+    align-items: stretch;
+  }
+}
+
+.process-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 36px 28px;
+  text-align: left;
+  transition: all 0.3s ease;
+}
+.process-card:hover {
+  border-color: var(--accent-dim);
+  box-shadow: 0 0 30px rgba(129, 140, 248, 0.06);
+}
+
+.process-number {
+  font-family: var(--font-mono);
+  font-size: 28px; font-weight: 500;
+  color: var(--accent); margin-bottom: 16px; opacity: 0.8;
+}
+.process-title {
+  font-family: var(--font-mono);
+  font-size: 12px; font-weight: 500;
+  letter-spacing: 3px; text-transform: uppercase;
+  color: var(--text-primary); margin-bottom: 14px;
+}
+.process-desc {
+  font-size: 14.5px; color: var(--text-secondary); line-height: 1.65;
+}
+
+.process-arrow {
+  display: none; align-items: center; justify-content: center;
+  color: var(--border); font-size: 20px;
+}
+@media (min-width: 768px) { .process-arrow { display: flex; } }
+
+/* ============================================
+   ABOUT SECTION
+   ============================================ */
+.about-section {
+  background: linear-gradient(180deg, transparent 0%, rgba(24, 24, 27, 0.3) 50%, transparent 100%);
+}
+
+.about-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 48px;
+  align-items: center;
+}
+@media (min-width: 768px) {
+  .about-grid { grid-template-columns: 280px 1fr; gap: 64px; }
+}
+
+.about-photo {
+  width: 100%; max-width: 280px;
+  aspect-ratio: 3 / 3.6;
+  border-radius: 16px;
+  border: 1px solid var(--border);
+  background: var(--surface);
+  overflow: hidden;
+}
+.about-photo-placeholder {
+  width: 100%; height: 100%;
+  background: linear-gradient(135deg, var(--surface) 0%, #27272A 50%, var(--surface) 100%);
+  display: flex; align-items: center; justify-content: center;
+  color: var(--text-secondary);
+  font-family: var(--font-mono); font-size: 13px;
+}
+.about-photo img { width: 100%; height: 100%; object-fit: cover; }
+
+.about-role-tag {
+  font-family: var(--font-mono); font-size: 11px;
+  color: var(--text-secondary); margin-top: 12px; letter-spacing: 0.5px;
+}
+
+.about-content { display: flex; flex-direction: column; gap: 20px; }
+.about-content .body-text { max-width: 480px; }
+
+.about-stat {
+  display: flex; align-items: center; gap: 12px;
+  font-family: var(--font-mono); font-size: 13px; color: var(--text-secondary);
+  margin-top: 8px; padding-top: 20px; border-top: 1px solid var(--border);
+}
+.about-stat .stat-dot {
+  width: 6px; height: 6px; border-radius: 50%; background: var(--accent);
+}
+
+/* ============================================
+   BOOKING SECTION
+   ============================================ */
+.booking-section { text-align: center; position: relative; }
+.booking-section::before {
+  content: '';
+  position: absolute; top: 50%; left: 50%;
+  transform: translate(-50%, -50%);
+  width: 500px; height: 500px;
+  background: radial-gradient(circle, rgba(129, 140, 248, 0.05) 0%, transparent 70%);
+  pointer-events: none;
+}
+
+.booking-header { margin-bottom: 40px; position: relative; }
+.booking-header .headline-lg { margin-bottom: 16px; }
+.booking-header .body-text { margin: 0 auto; text-align: center; }
+
+/* Locked state */
+.booking-locked {
+  max-width: 580px;
+  margin: 0 auto;
+  padding: 48px 40px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  position: relative;
+  overflow: hidden;
+}
+
+.booking-locked::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: repeating-linear-gradient(
+    -45deg,
+    transparent,
+    transparent 10px,
+    rgba(46, 46, 51, 0.3) 10px,
+    rgba(46, 46, 51, 0.3) 11px
+  );
+  pointer-events: none;
+  opacity: 0.4;
+}
+
+.booking-locked-content {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+}
+
+.lock-icon {
+  width: 48px; height: 48px;
+  border-radius: 50%;
+  background: rgba(161, 161, 170, 0.1);
+  border: 1px solid var(--border);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 20px;
+}
+
+.booking-locked-content h3 {
+  font-size: 18px; font-weight: 600;
+}
+
+.booking-locked-content p {
+  font-size: 14px; color: var(--text-secondary); max-width: 360px;
+}
+
+/* Unlocked state */
+.booking-unlocked {
+  display: none;
+}
+
+.booking-unlocked.active {
+  display: block;
+}
+
+.booking-embed-area {
+  max-width: 680px;
+  margin: 0 auto 32px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 40px;
+  min-height: 200px;
+  display: flex; align-items: center; justify-content: center;
+  position: relative;
+}
+
+.booking-placeholder {
+  display: flex; flex-direction: column;
+  align-items: center; gap: 20px;
+  color: var(--text-secondary);
+}
+
+.booking-placeholder p {
+  font-family: var(--font-mono); font-size: 13px; color: #52525B;
+}
+
+.booking-reassurance {
+  font-family: var(--font-mono); font-size: 13px; color: var(--text-secondary);
+  display: flex; align-items: center; justify-content: center;
+  gap: 8px; flex-wrap: wrap;
+}
+.reassurance-dot {
+  width: 3px; height: 3px;
+  background: var(--border); border-radius: 50%;
+}
+
+/* Brief summary in booking */
+.booking-brief {
+  max-width: 580px;
+  margin: 0 auto 32px;
+  background: rgba(52, 211, 153, 0.04);
+  border: 1px solid rgba(52, 211, 153, 0.15);
+  border-radius: 12px;
+  padding: 20px 24px;
+  text-align: left;
+}
+
+.booking-brief-header {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--green);
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  margin-bottom: 12px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.booking-brief-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-bottom: 8px;
+}
+
+.booking-brief-tag {
+  padding: 4px 12px;
+  background: rgba(52, 211, 153, 0.1);
+  border-radius: 16px;
+  font-size: 12px;
+  color: var(--green);
+}
+
+.booking-brief-text {
+  font-size: 14px;
+  color: var(--text-secondary);
+  line-height: 1.6;
+  margin-top: 8px;
+}
+
+/* ============================================
+   FOOTER
+   ============================================ */
+.footer {
+  text-align: center;
+  padding: 40px 24px;
+  font-family: var(--font-mono);
+  font-size: 12px;
+  color: #52525B;
+  letter-spacing: 0.5px;
+}
+
+.text-center { text-align: center; }
+.mx-auto { margin-left: auto; margin-right: auto; }
+</style>
+</head>
+<body>
+
+<div class="page-wrapper">
+
+  <!-- ========================================
+       HERO SECTION
+       ======================================== -->
+  <section class="section hero" id="hero">
+    <div class="hero-grid">
+      <div class="hero-text">
+        <div class="eyebrow fade-up">Strategy Session — 7 Figure MSP</div>
+        <h1 class="headline-xl fade-up stagger-1">
+          Before you book, get clear on what you <span>want to solve.</span>
+        </h1>
+        <p class="body-text fade-up stagger-2">
+          This isn't a generic call. It's a focused thinking session where we turn your challenge into a concrete next step.
+        </p>
+        <div class="fade-up stagger-3" style="margin-top: 16px;">
+          <a href="#intake" class="btn-primary">
+            Start Your Brief <span class="arrow">↓</span>
+          </a>
+        </div>
+      </div>
+
+      <div class="fade-up stagger-2">
+        <div class="workspace-panel">
+          <div class="workspace-header">
+            <span class="workspace-title">Strategy Workspace</span>
+            <span class="status-badge"><span class="status-dot"></span> Active</span>
+          </div>
+          <div class="workspace-items">
+            <div class="workspace-item">
+              <span class="workspace-item-left"><span class="item-arrow">▸</span> Strategy</span>
+              <span class="workspace-item-status status-ready">Ready</span>
+            </div>
+            <div class="workspace-item">
+              <span class="workspace-item-left"><span class="item-arrow">▸</span> Automation</span>
+              <span class="workspace-item-status status-ready">Ready</span>
+            </div>
+            <div class="workspace-item">
+              <span class="workspace-item-left"><span class="item-arrow">▸</span> Marketing</span>
+              <span class="workspace-item-status status-ready">Ready</span>
+            </div>
+            <div class="workspace-item">
+              <span class="workspace-item-left"><span class="item-arrow">▸</span> Positioning</span>
+              <span class="workspace-item-status status-review">In Review</span>
+            </div>
+            <div class="workspace-item">
+              <span class="workspace-item-left"><span class="item-arrow">▸</span> Execution</span>
+              <span class="workspace-item-status status-queued">Queued</span>
+            </div>
+            <div class="workspace-item">
+              <span class="workspace-item-left"><span class="item-arrow">▸</span> Growth Systems</span>
+              <span class="workspace-item-status status-ready">Ready</span>
+            </div>
+          </div>
+          <div class="workspace-footer">
+            <span class="workspace-footer-line"><span class="label">Session with:</span> Lea Frances Yu</span>
+            <span class="workspace-footer-line"><span class="label">Role:</span> Head of Member Success</span>
+            <span class="workspace-footer-line"><span class="label">Status:</span> Accepting bookings<span class="cursor-blink">_</span></span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="section-divider"></div>
+
+  <!-- ========================================
+       INTERACTIVE INTAKE FLOW
+       ======================================== -->
+  <section class="section intake-section" id="intake">
+
+    <!-- Progress Bar -->
+    <div class="intake-progress fade-up">
+      <div class="progress-step active" data-step="1">
+        <span class="progress-step-number">1</span>
+        <span>Select</span>
+      </div>
+      <div class="progress-line"></div>
+      <div class="progress-step" data-step="2">
+        <span class="progress-step-number">2</span>
+        <span>Describe</span>
+      </div>
+      <div class="progress-line"></div>
+      <div class="progress-step" data-step="3">
+        <span class="progress-step-number">3</span>
+        <span>Review</span>
+      </div>
+    </div>
+
+    <!-- STEP 1: Select Your Challenge -->
+    <div class="intake-step active" id="step-1">
+      <div class="intake-step-header">
+        <div class="eyebrow">Step 1 of 3</div>
+        <h2 class="headline-md">What do you want to work on?</h2>
+        <p class="body-text">Select one or two that feel closest to where you are right now.</p>
+      </div>
+
+      <div class="challenge-cards">
+        <div class="challenge-card" data-challenge="Goal but no plan">
+          <div class="challenge-card-check">&#10003;</div>
+          <div class="challenge-card-number">01</div>
+          <div class="challenge-card-title">"I have a goal but no plan."</div>
+          <div class="challenge-card-desc">You know where you want to go but the path isn't clear yet.</div>
+        </div>
+        <div class="challenge-card" data-challenge="Stuck between directions">
+          <div class="challenge-card-check">&#10003;</div>
+          <div class="challenge-card-number">02</div>
+          <div class="challenge-card-title">"I'm stuck between two directions."</div>
+          <div class="challenge-card-desc">You need a thinking partner to pressure-test your options.</div>
+        </div>
+        <div class="challenge-card" data-challenge="Fix offer or positioning">
+          <div class="challenge-card-check">&#10003;</div>
+          <div class="challenge-card-number">03</div>
+          <div class="challenge-card-title">"I need to fix my offer or positioning."</div>
+          <div class="challenge-card-desc">Something about how you sell isn't landing the way it should.</div>
+        </div>
+        <div class="challenge-card" data-challenge="Build systems that scale">
+          <div class="challenge-card-check">&#10003;</div>
+          <div class="challenge-card-number">04</div>
+          <div class="challenge-card-title">"I want to build systems that scale."</div>
+          <div class="challenge-card-desc">You're doing too much manually and need a better structure.</div>
+        </div>
+        <div class="challenge-card" data-challenge="Not executing on my plan">
+          <div class="challenge-card-check">&#10003;</div>
+          <div class="challenge-card-number">05</div>
+          <div class="challenge-card-title">"I have a plan but I'm not executing."</div>
+          <div class="challenge-card-desc">The strategy exists — the follow-through doesn't.</div>
+        </div>
+        <div class="challenge-card" data-challenge="Need a thinking partner">
+          <div class="challenge-card-check">&#10003;</div>
+          <div class="challenge-card-number">06</div>
+          <div class="challenge-card-title">"I just need someone to think with."</div>
+          <div class="challenge-card-desc">Sometimes the value is the conversation itself.</div>
+        </div>
+      </div>
+
+      <div class="intake-nav">
+        <button class="btn-primary" id="step1-next" disabled>
+          Continue <span class="arrow">→</span>
+        </button>
+        <span class="step-counter">Step 1 of 3</span>
+      </div>
+    </div>
+
+    <!-- STEP 2: Describe Your Challenge -->
+    <div class="intake-step" id="step-2">
+      <div class="intake-step-header">
+        <div class="eyebrow">Step 2 of 3</div>
+        <h2 class="headline-md">Tell me more about where you are.</h2>
+        <p class="body-text">Don't overthink it. A few sentences is all I need to come prepared.</p>
+      </div>
+
+      <div class="detail-form">
+        <div class="form-group">
+          <label class="form-label">What's the situation?</label>
+          <span class="form-sublabel">What's happening in your business right now that prompted this?</span>
+          <textarea class="form-textarea" id="situation-input" placeholder="e.g. I've been stuck at $40k MRR for 6 months and I think my offer might be the problem, but I'm not sure if I should change my pricing, my packaging, or my target market..."></textarea>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">What would a win look like?</label>
+          <span class="form-sublabel">If this session goes perfectly, what do you walk away with?</span>
+          <textarea class="form-textarea" id="win-input" placeholder="e.g. A clear decision on which direction to go, with a 30-day action plan I can start immediately..." style="min-height: 100px;"></textarea>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">How urgent is this?</label>
+          <select class="form-select" id="urgency-input">
+            <option value="">Select one...</option>
+            <option value="Exploring — no rush">Exploring — no rush</option>
+            <option value="Thinking about it actively">Thinking about it actively</option>
+            <option value="Need to move on this soon">Need to move on this soon</option>
+            <option value="This is blocking everything">This is blocking everything</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="intake-nav">
+        <button class="btn-secondary" id="step2-back">← Back</button>
+        <button class="btn-primary" id="step2-next">
+          Review Your Brief <span class="arrow">→</span>
+        </button>
+        <span class="step-counter">Step 2 of 3</span>
+      </div>
+    </div>
+
+    <!-- STEP 3: Review Brief -->
+    <div class="intake-step" id="step-3">
+      <div class="intake-step-header">
+        <div class="eyebrow">Step 3 of 3</div>
+        <h2 class="headline-md">Here's your session brief.</h2>
+        <p class="body-text">Review what you've shared. This gets sent to Lea so she can come prepared.</p>
+      </div>
+
+      <div class="review-panel">
+        <div class="review-card">
+          <div class="review-card-header">Session Brief</div>
+
+          <div class="review-item">
+            <div class="review-item-label">Working on</div>
+            <div class="review-item-value">
+              <div class="review-tags" id="review-challenges"></div>
+            </div>
+          </div>
+
+          <div class="review-item">
+            <div class="review-item-label">The situation</div>
+            <div class="review-item-value" id="review-situation">—</div>
+          </div>
+
+          <div class="review-item">
+            <div class="review-item-label">A win looks like</div>
+            <div class="review-item-value" id="review-win">—</div>
+          </div>
+
+          <div class="review-item">
+            <div class="review-item-label">Urgency</div>
+            <div class="review-item-value" id="review-urgency">—</div>
+          </div>
+        </div>
+
+        <div class="review-note">
+          <span>💡</span>
+          <span>This brief will be shared with Lea before your session so she can prepare. You can always bring up other topics during the call.</span>
+        </div>
+      </div>
+
+      <div class="intake-nav">
+        <button class="btn-secondary" id="step3-back">← Edit</button>
+        <button class="btn-primary btn-large" id="step3-submit">
+          Lock It In & Book <span class="arrow">→</span>
+        </button>
+        <span class="step-counter">Step 3 of 3</span>
+      </div>
+    </div>
+
+  </section>
+
+  <div class="section-divider"></div>
+
+  <!-- ========================================
+       HOW THE SESSION WORKS
+       ======================================== -->
+  <section class="section process-section" id="process">
+    <div class="process-header">
+      <div class="eyebrow fade-up">The Process</div>
+      <h2 class="headline-md fade-up stagger-1">How the session works</h2>
+      <p class="body-text mx-auto fade-up stagger-2">
+        Every session follows a simple structure designed to move you from unclear to actionable.
+      </p>
+    </div>
+    <div class="process-steps">
+      <div class="process-card fade-up stagger-1">
+        <div class="process-number">01</div>
+        <div class="process-title">Clarify</div>
+        <div class="process-desc">We start by defining what you're actually trying to solve. Not the surface-level version — the real one underneath it.</div>
+      </div>
+      <div class="process-arrow fade-up stagger-2">→</div>
+      <div class="process-card fade-up stagger-3">
+        <div class="process-number">02</div>
+        <div class="process-title">Map</div>
+        <div class="process-desc">We explore your options, pressure-test your thinking, and build a plan that fits your business right now.</div>
+      </div>
+      <div class="process-arrow fade-up stagger-4">→</div>
+      <div class="process-card fade-up stagger-5">
+        <div class="process-number">03</div>
+        <div class="process-title">Commit</div>
+        <div class="process-desc">You leave with one clear, concrete next step. Not a 47-point to-do list. One thing to move on immediately.</div>
+      </div>
+    </div>
+  </section>
+
+  <div class="section-divider"></div>
+
+  <!-- ========================================
+       ABOUT LEA
+       ======================================== -->
+  <section class="section about-section" id="about">
+    <div class="about-grid">
+      <div class="about-photo-wrapper fade-up">
+        <div class="about-photo">
+          <!-- Your photo -->
+          <img src="Lea.png" alt="Lea Frances Yu — Head of Member Success at 7 Figure MSP" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+          <div class="about-photo-placeholder" style="display:none;">Your photo here</div>
+        </div>
+        <div class="about-role-tag">Head of Member Success</div>
+      </div>
+      <div class="about-content">
+        <div class="eyebrow fade-up">Your Session Partner</div>
+        <h2 class="headline-md fade-up stagger-1">Hi, I'm Lea.</h2>
+        <p class="body-text fade-up stagger-2">
+          I'm the Head of Member Success at 7 Figure MSP. My job is to help members get unstuck — whether that means thinking through strategy, brainstorming new ideas, or turning a plan into actual execution.
+        </p>
+        <p class="body-text fade-up stagger-3">
+          I've worked with hundreds of MSP owners across every stage of growth. I don't give you a script. I give you clarity.
+        </p>
+        <div class="about-stat fade-up stagger-4">
+          <span class="stat-dot"></span>
+          500+ strategy sessions completed
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="section-divider"></div>
+
+  <!-- ========================================
+       BOOKING SECTION
+       ======================================== -->
+  <section class="section booking-section" id="booking">
+    <div class="booking-header">
+      <div class="eyebrow fade-up">Let's Work</div>
+      <h2 class="headline-lg fade-up stagger-1">Ready to think it through?</h2>
+      <p class="body-text mx-auto fade-up stagger-2">
+        Complete your strategy brief above, then pick a time that works.
+      </p>
+    </div>
+
+    <!-- Locked State (before intake is done) -->
+    <div class="booking-locked fade-up stagger-3" id="booking-locked">
+      <div class="booking-locked-content">
+        <div class="lock-icon">🔒</div>
+        <h3>Complete your brief to unlock booking</h3>
+        <p>Fill out the strategy intake above so Lea can come prepared for your session.</p>
+        <a href="#intake" class="btn-primary">Start Your Brief ↑</a>
+      </div>
+    </div>
+
+    <!-- Unlocked State (after intake is done) -->
+    <div class="booking-unlocked" id="booking-unlocked">
+
+      <div class="booking-brief" id="booking-brief-summary">
+        <div class="booking-brief-header">
+          <span>✓</span> Your brief is ready
+        </div>
+        <div class="booking-brief-tags" id="booking-tags"></div>
+        <div class="booking-brief-text" id="booking-situation-preview"></div>
+      </div>
+
+      <div class="booking-embed-area">
+        <!--
+          Replace with Calendly embed:
+          <div class="calendly-inline-widget"
+               data-url="https://calendly.com/YOUR-LINK?background_color=18181b&text_color=f4f4f5&primary_color=818cf8"
+               style="min-width:320px;height:700px;">
+          </div>
+          <script src="https://assets.calendly.com/assets/external/widget.js" async></script>
+        -->
+        <div class="booking-placeholder">
+          <a href="#" class="btn-primary btn-large">Book Your Strategy Session →</a>
+          <p>Replace this with your Calendly embed code</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="booking-reassurance fade-up stagger-4">
+      <span>30-minute focused session</span>
+      <span class="reassurance-dot"></span>
+      <span>Brief shared with Lea beforehand</span>
+      <span class="reassurance-dot"></span>
+      <span>For 7 Figure MSP members</span>
+    </div>
+  </section>
+
+  <footer class="footer">
+    7 Figure MSP · Strategy Session with Lea Frances Yu
+  </footer>
+
+</div>
+
+<!-- ========================================
+     INTERACTIVE LOGIC
+     ======================================== -->
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+
+  // ---- Scroll animation observer ----
+  const observer = new IntersectionObserver(
+    (entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) entry.target.classList.add('visible');
+      });
+    },
+    { threshold: 0.1, rootMargin: '0px 0px -40px 0px' }
+  );
+  document.querySelectorAll('.fade-up').forEach((el) => observer.observe(el));
+
+  // ---- Intake state ----
+  const state = {
+    challenges: [],
+    situation: '',
+    win: '',
+    urgency: '',
+  };
+
+  // ---- Elements ----
+  const challengeCards = document.querySelectorAll('.challenge-card');
+  const step1Next = document.getElementById('step1-next');
+  const step2Back = document.getElementById('step2-back');
+  const step2Next = document.getElementById('step2-next');
+  const step3Back = document.getElementById('step3-back');
+  const step3Submit = document.getElementById('step3-submit');
+  const progressSteps = document.querySelectorAll('.progress-step');
+
+  // ---- Challenge card selection ----
+  challengeCards.forEach((card) => {
+    card.addEventListener('click', () => {
+      const challenge = card.dataset.challenge;
+
+      if (card.classList.contains('selected')) {
+        card.classList.remove('selected');
+        state.challenges = state.challenges.filter(c => c !== challenge);
+      } else {
+        if (state.challenges.length < 2) {
+          card.classList.add('selected');
+          state.challenges.push(challenge);
+        } else {
+          // Deselect the first one, select this one
+          const firstSelected = document.querySelector('.challenge-card.selected');
+          if (firstSelected) {
+            firstSelected.classList.remove('selected');
+            state.challenges.shift();
+          }
+          card.classList.add('selected');
+          state.challenges.push(challenge);
+        }
+      }
+
+      step1Next.disabled = state.challenges.length === 0;
+    });
+  });
+
+  // ---- Step navigation ----
+  function goToStep(num) {
+    document.querySelectorAll('.intake-step').forEach(s => s.classList.remove('active'));
+    document.getElementById(`step-${num}`).classList.add('active');
+
+    progressSteps.forEach((ps) => {
+      const stepNum = parseInt(ps.dataset.step);
+      ps.classList.remove('active', 'completed');
+      if (stepNum < num) ps.classList.add('completed');
+      else if (stepNum === num) ps.classList.add('active');
+    });
+
+    // Scroll to intake section
+    document.getElementById('intake').scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+
+  step1Next.addEventListener('click', () => {
+    if (state.challenges.length > 0) goToStep(2);
+  });
+
+  step2Back.addEventListener('click', () => goToStep(1));
+
+  step2Next.addEventListener('click', () => {
+    state.situation = document.getElementById('situation-input').value;
+    state.win = document.getElementById('win-input').value;
+    state.urgency = document.getElementById('urgency-input').value;
+
+    // Populate review
+    const reviewChallenges = document.getElementById('review-challenges');
+    reviewChallenges.innerHTML = state.challenges.map(c =>
+      `<span class="review-tag">▸ ${c}</span>`
+    ).join('');
+
+    document.getElementById('review-situation').textContent =
+      state.situation || '(not provided — that\'s okay)';
+    document.getElementById('review-win').textContent =
+      state.win || '(not provided — that\'s okay)';
+    document.getElementById('review-urgency').textContent =
+      state.urgency || '(not selected)';
+
+    goToStep(3);
+  });
+
+  step3Back.addEventListener('click', () => goToStep(2));
+
+  step3Submit.addEventListener('click', () => {
+    // Unlock booking
+    document.getElementById('booking-locked').style.display = 'none';
+    const unlocked = document.getElementById('booking-unlocked');
+    unlocked.classList.add('active');
+
+    // Populate mini brief in booking section
+    const bookingTags = document.getElementById('booking-tags');
+    bookingTags.innerHTML = state.challenges.map(c =>
+      `<span class="booking-brief-tag">${c}</span>`
+    ).join('');
+
+    const situationPreview = document.getElementById('booking-situation-preview');
+    if (state.situation) {
+      situationPreview.textContent = state.situation.length > 150
+        ? state.situation.substring(0, 150) + '...'
+        : state.situation;
+    } else {
+      situationPreview.textContent = '';
+    }
+
+    // Mark all progress steps as completed
+    progressSteps.forEach(ps => {
+      ps.classList.remove('active');
+      ps.classList.add('completed');
+    });
+
+    // Scroll to booking
+    document.getElementById('booking').scrollIntoView({ behavior: 'smooth', block: 'start' });
+  });
+
+});
+</script>
+
+</body>
+</html>
