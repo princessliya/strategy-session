@@ -1245,18 +1245,7 @@ body::before {
       </div>
 
       <div class="booking-embed-area">
-        <!--
-          Replace with Calendly embed:
-          <div class="calendly-inline-widget"
-               data-url="https://calendly.com/YOUR-LINK?background_color=18181b&text_color=f4f4f5&primary_color=818cf8"
-               style="min-width:320px;height:700px;">
-          </div>
-          <script src="https://assets.calendly.com/assets/external/widget.js" async></script>
-        -->
-        <div class="booking-placeholder">
-          <a href="#" class="btn-primary btn-large">Book Your Strategy Session →</a>
-          <p>Replace this with your Calendly embed code</p>
-        </div>
+        <a href="http://bit.ly/3OcIbiX" target="_blank" rel="noopener noreferrer" class="btn-primary btn-large">Book Your Strategy Session →</a>
       </div>
     </div>
 
@@ -1408,6 +1397,18 @@ document.addEventListener('DOMContentLoaded', () => {
       ps.classList.remove('active');
       ps.classList.add('completed');
     });
+
+    // Send brief to Google Sheet (GET request — bypasses CORS)
+    const sheetParams = new URLSearchParams({
+      challenge1: state.challenges[0] || '',
+      challenge2: state.challenges[1] || '',
+      situation: state.situation || '',
+      desiredWin: state.win || '',
+      urgency: state.urgency || ''
+    });
+    const sheetURL = 'https://script.google.com/macros/s/AKfycbwXLz6KvoqvpXZ3a8IZE-pmE4J9XndubQZ8RzV7Pk01ZFULT3jQIFDGz9pCOtcXw7Gb/exec';
+    const beacon = new Image();
+    beacon.src = `${sheetURL}?${sheetParams.toString()}`;
 
     // Scroll to booking
     document.getElementById('booking').scrollIntoView({ behavior: 'smooth', block: 'start' });
