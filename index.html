@@ -608,6 +608,58 @@ body::before {
   margin-top: 16px;
 }
 
+/* Strategy Snapshot */
+.strategy-snapshot {
+  background: rgba(52, 211, 153, 0.04);
+  border: 1px solid rgba(52, 211, 153, 0.2);
+  border-radius: 16px;
+  padding: 28px;
+  margin-top: 24px;
+}
+.snapshot-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 6px;
+}
+.snapshot-icon {
+  font-size: 18px;
+}
+.snapshot-label {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: var(--green);
+}
+.snapshot-pattern {
+  font-size: 20px;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin-bottom: 12px;
+}
+.snapshot-insight {
+  font-size: 15px;
+  line-height: 1.7;
+  color: var(--text-secondary);
+  margin-bottom: 20px;
+}
+.snapshot-prompt {
+  background: rgba(52, 211, 153, 0.08);
+  border-radius: 10px;
+  padding: 16px 20px;
+  font-size: 14px;
+  line-height: 1.6;
+  color: var(--green);
+  display: flex;
+  align-items: start;
+  gap: 10px;
+}
+.snapshot-prompt-icon {
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
 /* Step navigation */
 .intake-nav {
   display: flex;
@@ -915,10 +967,10 @@ body::before {
       <div class="hero-text">
         <div class="eyebrow fade-up">Strategy Session — 7 Figure MSP</div>
         <h1 class="headline-xl fade-up stagger-1">
-          Before you book, get clear on what you <span>want to solve.</span>
+          You're growing your MSP. <span>But something's stuck.</span>
         </h1>
         <p class="body-text fade-up stagger-2">
-          This isn't a generic call. It's a focused thinking session where we turn your challenge into a concrete next step.
+          This isn't a generic coaching call. In 30 minutes, we'll find the one thing that's actually holding you back — and what to do about it this week.
         </p>
         <div class="fade-up stagger-3" style="margin-top: 16px;">
           <a href="#intake" class="btn-primary">
@@ -1130,6 +1182,20 @@ body::before {
           <span>💡</span>
           <span>This brief will be shared with Lea before your session so she can prepare. You can always bring up other topics during the call.</span>
         </div>
+
+        <!-- Strategy Snapshot -->
+        <div class="strategy-snapshot" id="strategy-snapshot">
+          <div class="snapshot-header">
+            <span class="snapshot-icon">🧠</span>
+            <span class="snapshot-label">Your Strategy Snapshot</span>
+          </div>
+          <div class="snapshot-pattern" id="snapshot-pattern"></div>
+          <div class="snapshot-insight" id="snapshot-insight"></div>
+          <div class="snapshot-prompt">
+            <span class="snapshot-prompt-icon">💡</span>
+            <span id="snapshot-prompt"></span>
+          </div>
+        </div>
       </div>
 
       <div class="intake-nav">
@@ -1198,6 +1264,9 @@ body::before {
         </p>
         <p class="body-text fade-up stagger-3">
           I am working with hundreds of MSP owners across every stage of growth. I don't give you a script. I give you clarity.
+        </p>
+        <p class="body-text fade-up stagger-4" style="color: var(--accent); font-weight: 500;">
+          Members walk out of these sessions with clarity they've been chasing for months — a pricing fix, a hiring decision, a growth plan that finally makes sense.
         </p>
       </div>
     </div>
@@ -1274,6 +1343,132 @@ document.addEventListener('DOMContentLoaded', () => {
     { threshold: 0.1, rootMargin: '0px 0px -40px 0px' }
   );
   document.querySelectorAll('.fade-up').forEach((el) => observer.observe(el));
+
+  // ---- Strategy Snapshot Data ----
+  const snapshotData = {
+    singles: {
+      'Goal but no plan': {
+        pattern: 'Vision without a roadmap',
+        insight: "You can see the destination clearly — but the steps to get there feel blurry. Most MSP owners who struggle here don't lack ambition, they lack a framework for turning big goals into weekly actions.",
+        prompt: 'Before our session, ask yourself: "If I could only accomplish one thing in the next 90 days, what would move everything else forward?"'
+      },
+      'Stuck between directions': {
+        pattern: 'The decision bottleneck',
+        insight: "When you're stuck between options, it's rarely because you lack information — it's because you haven't defined what matters most. The real question isn't \"which path is better?\" It's \"what am I optimizing for?\"",
+        prompt: 'Before our session, write down both options and ask: "Which one am I most afraid of getting wrong — and why?"'
+      },
+      'Fix offer or positioning': {
+        pattern: 'The message-market mismatch',
+        insight: "If your offer isn't landing, one of three things is off: you're talking to the wrong people, solving the wrong problem, or explaining it the wrong way. Most MSP owners jump to changing their price — but the real fix is usually upstream.",
+        prompt: 'Before our session, ask yourself: "When was the last time a prospect said yes immediately — and what was different about that conversation?"'
+      },
+      'Build systems that scale': {
+        pattern: 'The founder bottleneck',
+        insight: "If everything still runs through you, you don't have a business — you have a job with overhead. The fix isn't \"hire more people.\" It's identifying which of your daily actions can become a process someone else owns.",
+        prompt: 'Before our session, track this for one day: every time someone asks you a question or needs your approval. That list is your systems roadmap.'
+      },
+      'Not executing on my plan': {
+        pattern: 'Strategy-rich, action-poor',
+        insight: "You probably don't have an execution problem. You have a priority problem. When everything feels important, nothing gets done. The gap between your plan and your action usually comes down to one thing: the plan has too many steps.",
+        prompt: 'Before our session, look at your current plan and circle the ONE item that — if done — would make the biggest difference. That\'s where we start.'
+      },
+      'Need a thinking partner': {
+        pattern: 'The lonely founder loop',
+        insight: "Running an MSP can be isolating. You're making decisions all day but rarely have someone to think with — someone who gets the MSP world and can challenge your assumptions without an agenda.",
+        prompt: 'Before our session, jot down the one thing you keep going back and forth on. The thing that lives rent-free in your head. Let\'s tackle that.'
+      }
+    },
+    combos: {
+      'Goal but no plan+Stuck between directions': {
+        pattern: 'Too many paths, no compass',
+        insight: "You have a big vision but multiple ways to get there — and that's creating paralysis. The fix isn't more research or more options. It's defining your non-negotiables so the right path becomes obvious.",
+        prompt: 'Before our session, finish this sentence: "No matter what direction I go, it HAS to include ___."'
+      },
+      'Goal but no plan+Fix offer or positioning': {
+        pattern: 'Big ambition, unclear offer',
+        insight: "You know you want to grow, but your current offer might not be the vehicle to get you there. Before building a plan, we need to make sure what you're selling is what the market actually wants to buy.",
+        prompt: 'Before our session, ask yourself: "If I doubled my price tomorrow, would my current clients still say yes? Why or why not?"'
+      },
+      'Goal but no plan+Build systems that scale': {
+        pattern: 'Vision without infrastructure',
+        insight: "You can see the future of your MSP — but the foundation to support it doesn't exist yet. Scaling without systems is just creating bigger chaos. We need to build the machine before we floor it.",
+        prompt: 'Before our session, ask yourself: "What\'s the one thing I\'m doing repeatedly that should be a system?"'
+      },
+      'Goal but no plan+Not executing on my plan': {
+        pattern: 'Stalled at the starting line',
+        insight: "You've got the ambition and maybe even fragments of a plan — but nothing's moving. This usually means the goal feels too big and the first step isn't clear enough. We need to shrink the target.",
+        prompt: 'Before our session, ask: "What\'s the smallest possible action I could take this week that would create momentum?"'
+      },
+      'Goal but no plan+Need a thinking partner': {
+        pattern: 'Ready to build, need a co-pilot',
+        insight: "You're at a pivotal moment — the goal is there but the plan needs shaping. Sometimes all it takes is one focused conversation to turn a fuzzy vision into a 90-day roadmap.",
+        prompt: 'Before our session, try to describe your goal in one sentence. If you can\'t, that\'s our first job together.'
+      },
+      'Stuck between directions+Fix offer or positioning': {
+        pattern: 'Positioning paralysis',
+        insight: "You're torn because your current positioning leaves the door open to multiple paths — but none feel quite right. The breakthrough usually comes from getting ruthlessly specific about who you serve and what transformation you deliver.",
+        prompt: 'Before our session, ask: "Who is my absolute best client — and what do they value most about working with me?"'
+      },
+      'Stuck between directions+Build systems that scale': {
+        pattern: 'Build vs. optimize dilemma',
+        insight: "You're deciding between scaling what you have or building something new — and both feel urgent. The answer depends on whether your current model is worth systematizing or if it needs to evolve first.",
+        prompt: 'Before our session, ask: "If I scaled exactly what I\'m doing today 3x, would I love that business or hate it?"'
+      },
+      'Stuck between directions+Not executing on my plan': {
+        pattern: 'Analysis paralysis',
+        insight: "The indecision IS the problem. Every day you spend weighing options is a day your competitors are executing. You don't need more information — you need a framework for making the call and committing.",
+        prompt: 'Before our session, set a timer for 2 minutes and write down what your gut is telling you. Often you already know the answer.'
+      },
+      'Stuck between directions+Need a thinking partner': {
+        pattern: 'Decision needs a sounding board',
+        insight: "Some decisions can't be made alone — not because you're incapable, but because you're too close to it. An outside perspective can see the obvious answer that's invisible from the inside.",
+        prompt: 'Before our session, write down both options with pros and cons. Bring your messiest thinking — that\'s where the gold is.'
+      },
+      'Fix offer or positioning+Build systems that scale': {
+        pattern: 'Scaling what doesn\'t land',
+        insight: "Building systems around an offer that isn't working just means you'll deliver the wrong thing faster. Let's fix what you're selling first, then build the machine to deliver it at scale.",
+        prompt: 'Before our session, ask: "Am I trying to scale because the offer works, or am I hoping scale will fix what\'s broken?"'
+      },
+      'Fix offer or positioning+Not executing on my plan': {
+        pattern: 'Stuck because the foundation is shaky',
+        insight: "You're not executing because something deep down tells you the offer isn't right. That hesitation is actually wisdom — it's better to fix the foundation now than to sprint in the wrong direction.",
+        prompt: 'Before our session, ask: "What part of my current offer do I feel most confident about — and what feels forced?"'
+      },
+      'Fix offer or positioning+Need a thinking partner': {
+        pattern: 'Offer needs outside eyes',
+        insight: "When you're inside your own business, it's nearly impossible to see your positioning clearly. You need someone who can look at what you do through your clients' eyes and tell you what's landing and what isn't.",
+        prompt: 'Before our session, try explaining what you do to a stranger in 30 seconds. The parts where you stumble reveal the gaps.'
+      },
+      'Build systems that scale+Not executing on my plan': {
+        pattern: 'Knows what to build, can\'t start building',
+        insight: "You can see the systems you need, but building them while running the business feels impossible. This is the classic \"changing the engine while driving\" problem. The trick is finding the one system that buys you time for the rest.",
+        prompt: 'Before our session, identify: "Which recurring task eats the most of my time each week?" That\'s system #1.'
+      },
+      'Build systems that scale+Need a thinking partner': {
+        pattern: 'Architect seeking a blueprint review',
+        insight: "You're ready to build the infrastructure your MSP needs — you just need someone to think through the architecture with you. The right systems in the right order can transform your business in 90 days.",
+        prompt: 'Before our session, list every hat you currently wear. The ones you hate most are the first to systemize.'
+      },
+      'Not executing on my plan+Need a thinking partner': {
+        pattern: 'The accountability gap',
+        insight: "Having a plan isn't enough. Having someone who sees your plan and expects you to deliver on it — that changes everything. Sometimes the missing ingredient isn't strategy, it's someone who won't let you off the hook.",
+        prompt: 'Before our session, be honest: "What am I avoiding — and what would happen if I just did it?"'
+      }
+    }
+  };
+
+  function getSnapshot(challenges) {
+    if (challenges.length === 2) {
+      const key1 = challenges[0] + '+' + challenges[1];
+      const key2 = challenges[1] + '+' + challenges[0];
+      if (snapshotData.combos[key1]) return snapshotData.combos[key1];
+      if (snapshotData.combos[key2]) return snapshotData.combos[key2];
+    }
+    if (challenges.length >= 1 && snapshotData.singles[challenges[0]]) {
+      return snapshotData.singles[challenges[0]];
+    }
+    return null;
+  }
 
   // ---- Intake state ----
   const state = {
@@ -1359,6 +1554,18 @@ document.addEventListener('DOMContentLoaded', () => {
       state.win || '(not provided — that\'s okay)';
     document.getElementById('review-urgency').textContent =
       state.urgency || '(not selected)';
+
+    // Populate Strategy Snapshot
+    const snapshot = getSnapshot(state.challenges);
+    const snapshotEl = document.getElementById('strategy-snapshot');
+    if (snapshot) {
+      document.getElementById('snapshot-pattern').textContent = snapshot.pattern;
+      document.getElementById('snapshot-insight').textContent = snapshot.insight;
+      document.getElementById('snapshot-prompt').textContent = snapshot.prompt;
+      snapshotEl.style.display = 'block';
+    } else {
+      snapshotEl.style.display = 'none';
+    }
 
     goToStep(3);
   });
